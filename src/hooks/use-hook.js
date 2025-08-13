@@ -20,5 +20,6 @@ export const useFormHook = (initialForm = {}) => {
     formState,
     onInputChange,
     onResetForm,
+    setFormState
   };
 };
