@@ -35,12 +35,12 @@ export const ClientTable = () => {
   const [listaUsuarios, setListaUsuarios] = useState([]);
   const [user, setUser] = useState(null);
   const [formState, setFormState] = useState({
-    nombre: '',
-    apellido: '',
-    correo: '',
-    telefono: '',
-    cedula: '',
-    id_rol: 0,
+    NOMBRE: '',
+    APELLIDO: '',
+    CORREO: '',
+    TELEFONO: '',
+    CEDULA: '',
+    ID_ROL: 0,
   });
   const [idUser, setIDUser] = useState(0);
   
@@ -68,12 +68,12 @@ export const ClientTable = () => {
 
     try {
       await axios.patch(`http://localhost:3000/v1/usuarios/modificar/${idUser}`, {
-        nombre: formState.nombre,
-        apellido: formState.apellido,
-        correo: formState.correo,
-        telefono: formState.telefono,
-        cedula: formState.cedula,
-        id_rol: formState.id_rol
+        nombre: formState.NOMBRE,
+        apellido: formState.APELLIDO,
+        correo: formState.CORREO,
+        telefono: formState.TELEFONO,
+        cedula: formState.CEDULA,
+        id_rol: Number(formState.ID_ROL)
       });
 
       await getListaUsuarios();
@@ -106,15 +106,15 @@ export const ClientTable = () => {
       setIsEditOpen(true);
 
       setFormState({
-        nombre: res.data[0].nombre || '',
-        apellido: res.data[0].apellido || '',
-        correo: res.data[0].correo || '',
-        telefono: res.data[0].telefono || '',
-        cedula: res.data[0].cedula || '',
-        id_rol: res.data[0].id_rol || ''
+        NOMBRE: res.data[0].NOMBRE || '',
+        APELLIDO: res.data[0].APELLIDO || '',
+        CORREO: res.data[0].CORREO || '',
+        TELEFONO: res.data[0].TELEFONO || '',
+        CEDULA: res.data[0].CEDULA || '',
+        ID_ROL: res.data[0].ID_ROL ?? 0
       });
 
-      setIDUser(id);
+      setIDUser(res.data[0].ID_USUARIO ?? id);
       
     } catch {
       toast.error("No se pudo obtener la información del usuario");
@@ -142,24 +142,24 @@ export const ClientTable = () => {
             </TableHeader>
             <TableBody>
               {listaUsuarios.map((usuario) => (
-                <TableRow key={usuario.id_usuario}>
-                  <TableCell className="font-medium">{usuario.id_usuario}</TableCell>
+                <TableRow key={usuario.ID_USUARIO}>
+                  <TableCell className="font-medium">{usuario.ID_USUARIO}</TableCell>
                   <TableCell className="font-medium">
-                    {usuario.nombre}
+                    {usuario.NOMBRE}
                   </TableCell>
-                  <TableCell>{usuario?.apellido}</TableCell>
-                  <TableCell>{usuario?.correo}</TableCell>
-                  <TableCell>{usuario?.telefono}</TableCell>
-                  <TableCell>{usuario?.cedula}</TableCell>
-                  <TableCell>{usuario?.estado === "A" ? "Activo" : "Inactivo" }</TableCell>
+                  <TableCell>{usuario?.APELLIDO}</TableCell>
+                  <TableCell>{usuario?.CORREO}</TableCell>
+                  <TableCell>{usuario?.TELEFONO}</TableCell>
+                  <TableCell>{usuario?.CEDULA}</TableCell>
+                  <TableCell>{usuario?.ESTADO === "A" ? "Activo" : "Inactivo" }</TableCell>
                   <TableCell className="flex justify-end gap-2">
                       <Button 
                       className="w-8 h-8" 
-                      onClick={() => openEditModal(usuario.id_usuario)}
+                      onClick={() => openEditModal(usuario.ID_USUARIO)}
                     >
                       <Pencil />
                     </Button>
-                    {/* Modal edición controlado */}
+                    
                     <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
                       <DialogContent className="sm:max-w-md lg:max-w-lg">
                         <DialogHeader>
@@ -175,13 +175,13 @@ export const ClientTable = () => {
 
                       <div className="grid gap-4 mt-2">
                         <div className="grid gap-3">
-                          <Label htmlFor="nombre">Nombre</Label>
+                          <Label htmlFor="NOMBRE">Nombre</Label>
                           <Input
-                            id="nombre"
-                            name="nombre"
-                            value={formState.nombre}
+                            id="NOMBRE"
+                            name="NOMBRE"
+                            value={formState.NOMBRE}
                             onChange={(e) =>
-                              setFormState({ ...formState, nombre: e.target.value })
+                              setFormState({ ...formState, NOMBRE: e.target.value })
                             }
                           />
                         </div>
@@ -190,9 +190,9 @@ export const ClientTable = () => {
                           <Input
                             id="apellido"
                             name="apellido"
-                            value={formState.apellido}
+                            value={formState.APELLIDO}
                             onChange={(e) =>
-                              setFormState({ ...formState, apellido: e.target.value })
+                              setFormState({ ...formState, APELLIDO: e.target.value })
                             }
                           />
                         </div>
@@ -201,9 +201,9 @@ export const ClientTable = () => {
                           <Input
                             id="correo"
                             name="correo"
-                            value={formState.correo}
+                            value={formState.CORREO}
                             onChange={(e) =>
-                              setFormState({ ...formState, correo: e.target.value })
+                              setFormState({ ...formState, CORREO: e.target.value })
                             }
                           />
                         </div>
@@ -212,9 +212,9 @@ export const ClientTable = () => {
                           <Input
                             id="telefono"
                             name="telefono"
-                            value={formState.telefono}
+                            value={formState.TELEFONO}
                             onChange={(e) =>
-                              setFormState({ ...formState, telefono: e.target.value })
+                              setFormState({ ...formState, TELEFONO: e.target.value })
                             }
                           />
                         </div>
@@ -223,9 +223,9 @@ export const ClientTable = () => {
                           <Input
                             id="cedula"
                             name="cedula"
-                            value={formState.cedula}
+                            value={formState.CEDULA}
                             onChange={(e) =>
-                              setFormState({ ...formState, cedula: e.target.value })
+                              setFormState({ ...formState, CEDULA: e.target.value })
                             }
                           />
                         </div>
@@ -233,7 +233,9 @@ export const ClientTable = () => {
 
                         <DialogFooter className="sm:justify-center">
                           <DialogClose asChild>
-                            <Button onClick={(event) => handleUpdate(event, usuario.id_usuario)}>Confirmar</Button>
+                            <Button onClick={(event) => {
+                              handleUpdate(event)
+                              }}>Confirmar</Button>
                           </DialogClose>
                         </DialogFooter>
                       </DialogContent>
@@ -259,7 +261,7 @@ export const ClientTable = () => {
                         <DialogFooter className="sm:justify-center">
                           <DialogClose asChild>
                             <Button onClick={(event) => {
-                              handleDelete(event, usuario.id_usuario)
+                              handleDelete(event, usuario.ID_USUARIO)
                               }}>Confirmar</Button>
                           </DialogClose>
                         </DialogFooter>
